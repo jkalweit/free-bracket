@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>Match.qml</file>
+        <file>Round.qml</file>
+        <file>Line.qml</file>
+        <file>Line2.qml</file>
+        <file>Teams.qml</file>
+        <file>Team.qml</file>
+    </qresource>
+</RCC>

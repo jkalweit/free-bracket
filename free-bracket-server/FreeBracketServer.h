@@ -16,6 +16,11 @@ class FreeBracketServer : public SimpleServer
     private:
         Bracket *m_bracket;
         QStringList m_history;
+
+        void addTeam(QString msg);
+        void deleteTeam(QString msg);
+        void startBracket();
+        void replayHistory(std::function<void (QString)> reply);
 };
 
 #endif // FREEBRACKETSERVER_H

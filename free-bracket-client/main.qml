@@ -100,6 +100,28 @@ ApplicationWindow {
                         y: 10 + (Math.pow(2, roundRepeater.roundModel.round - 1) * height) * (modelData.matchNumber - 1) + ((Math.pow(2, roundRepeater.roundModel.round - 1) - 1) * height/2)
                         roundModel: roundRepeater.roundModel
                         model: modelData
+                        isLosingBracket: false
+                    }
+                }
+            }
+
+
+
+            Repeater {
+                id: loserRoundsRepeater
+                model: bracket.loserRounds
+
+                Repeater {
+                    id: loserRoundRepeater
+                    property var roundModel: modelData
+                    model: modelData.matches
+
+                    Match {
+                        x: 10 + 220 + (loserRoundRepeater.roundModel.round - 1) * (width + 20)
+                        y: 10 + ((Math.pow(2, bracket.numRounds - 1) - 1) * 75) + (Math.pow(2, loserRoundRepeater.roundModel.round - 1) * height) * (modelData.matchNumber - 1) + ((Math.pow(2, loserRoundRepeater.roundModel.round - 1) - 1) * height/2)
+                        roundModel: loserRoundRepeater.roundModel
+                        model: modelData
+                        isLosingBracket: true
                     }
                 }
             }

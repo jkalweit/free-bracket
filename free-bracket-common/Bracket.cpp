@@ -77,10 +77,25 @@ int Bracket::numRounds() {
     return m_rounds.size();
 }
 
+void Bracket::fireLoserRoundsChanged() {
+    numLoserRoundsChanged(numLoserRounds());
+    loserRoundsChanged(loserRounds());
+}
+
+QQmlListProperty<BracketRound> Bracket::loserRounds() {
+    return QQmlListProperty<BracketRound>(this, m_loserRounds);
+}
+
+int Bracket::numLoserRounds() {
+    return m_loserRounds.size();
+}
+
 
 void Bracket::startTournament() {
 
+
     m_rounds.clear();
+    m_loserRounds.clear();
 
     quint8 rounds = 1;
 
@@ -90,23 +105,35 @@ void Bracket::startTournament() {
     }
 
     // create rounds in typical bracket format, starting with biggest round first
-    BracketRound *round;
     quint8 roundNumber = 1;
 
     BracketRound *firstRound = new BracketRound(roundNumber++, rounds, this);
     m_rounds.append(firstRound);
 
     for(int i = rounds - 1; i > 0; i--) {
-        round = new BracketRound(roundNumber++, i, this);
-        m_rounds.append(round);
+        m_rounds.append(new BracketRound(roundNumber++, i, this));
     }
 
     // set teams for first round
-    for(int i = 0; i < numTeams(); i++) {
-        firstRound->setTeam(i, m_teams[i]);
+    // (assume full number of teams, bye's teams should have been added)
+    for(int i = 0; i < numTeams(); i+=2) {
+        firstRound->setTeam(i, m_teams[i/2]);
+        firstRound->setTeam(i+1, m_teams[(numTeams()/2) + i/2]);
     }
 
     fireRoundsChanged();
+
+
+    roundNumber = 1;
+
+    // create loser bracket:
+    for(int i = rounds - 1; i > 0; i--) {
+        m_loserRounds.append(new BracketRound(roundNumber++, i, this));
+    }
+
+    fireLoserRoundsChanged();
+
+
 }
 
 void Bracket::setWinner(quint8 round, quint8 match, quint8 team) {
@@ -139,4 +166,7 @@ void Bracket::setWinner(quint8 round, quint8 match, quint8 team) {
         qDebug() << "Setting team2!";
         nextMatchObj->setTeam2(teamObj);
     }
+}
+
+void Bracket::setLoserBracketWinner(quint8 round, quint8 match, quint8 team) {
 }

@@ -4,6 +4,7 @@ Item {
     id: container
     property var roundModel
     property var model
+    property bool isLosingBracket: false
     //signal winner(string name)
 
     width: 200
@@ -31,11 +32,13 @@ Item {
                 text:  {
                     //Math.pow(2, container.roundModel.round) - 1 + modelData.matchNumber - 1;
                     var offset = 0;
+                    var numRounds = isLosingBracket ? bracket.numLoserRounds : bracket.numRounds;
+                    //console.log("numRounds: ", numRounds, "round: ", container.roundModel.round);
                     for(var i = 1; i < container.roundModel.round; i++) {
-                        offset += Math.pow(2, bracket.numRounds - i);
+                        offset += Math.pow(2, numRounds - i);
                     }
 
-                    return offset + modelData.matchNumber;
+                    return (isLosingBracket ? "L" : "") + (offset + modelData.matchNumber).toString();
                 }
             }
         }
